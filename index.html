@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebAssembly Test</title>
+  <title>WebAssembly Example</title>
 </head>
 <body>
   <h1>WebAssembly Example</h1>
@@ -15,7 +15,9 @@
     async function loadWasm() {
       const response = await fetch("index.wasm");
       const buffer = await response.arrayBuffer();
-      const wasmModule = await WebAssembly.instantiate(buffer);
+      
+      // Добавлен пустой объект в качестве импорта
+      const wasmModule = await WebAssembly.instantiate(buffer, {});
 
       // Пример вызова функции, экспортируемой из WASM модуля
       if (wasmModule.instance.exports._logMessage) {
