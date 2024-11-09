@@ -6,7 +6,7 @@
   <title>WebAssembly Example</title>
 </head>
 <body>
-  <h1>WebAssembly Example</h1>
+  <h1>WebAssembly Example X</h1>
   <button id="runButton">Run WASM</button>
 
   <script>
@@ -15,13 +15,26 @@
     async function loadWasm() {
       const response = await fetch("index.wasm");
       const buffer = await response.arrayBuffer();
-      
-      // Добавлен пустой объект в качестве импорта
-      const wasmModule = await WebAssembly.instantiate(buffer, {});
 
-      // Пример вызова функции, экспортируемой из WASM модуля
-      if (wasmModule.instance.exports._logMessage) {
-        wasmModule.instance.exports._logMessage();
+      // Определим необходимые импорты
+      const imports = {
+        env: {
+          // Например, можно добавить системные вызовы или другие функции, которые ожидаются
+          _logMessage: function() {
+            console.log("Hello from WebAssembly!");
+          }
+        }
+      };
+
+      try {
+        const wasmModule = await WebAssembly.instantiate(buffer, imports);
+
+        // Пример вызова функции из WebAssembly
+        if (wasmModule.instance.exports._logMessage) {
+          wasmModule.instance.exports._logMessage();
+        }
+      } catch (e) {
+        console.error("Error instantiating WebAssembly:", e);
       }
     }
 
